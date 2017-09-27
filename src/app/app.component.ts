@@ -33,4 +33,10 @@ export class AppComponent implements OnInit {
       rating: 5
     });
   }
+
+  remove() {
+    this.af.database.object('/restaurant').remove()
+      .then(x => console.log('Success'))
+      .catch(error => console.log('Error', error));
+  }
 }
