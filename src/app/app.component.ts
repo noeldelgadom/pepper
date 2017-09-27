@@ -17,8 +17,12 @@ export class AppComponent implements OnInit {
   constructor(private af: AngularFire) {}
 
   ngOnInit() {
-    this.cuisines = this.af.database.list('/cuisines');
-    this.restaurants = this.af.database.list('/restaurants')
+    this.cuisines = this.af.database.list('/cuisines', {
+      query: { orderByKey: true }
+    });
+    this.restaurants = this.af.database.list('/restaurants', {
+      query: { orderByChild: 'name' }
+    })
       .map(restaurants => {
         restaurants.map(restaurant => {
           restaurant.featureTypes = [];
