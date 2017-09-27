@@ -1,5 +1,7 @@
+import { Observable } from 'rxjs/Rx';
 import { Component, OnInit } from '@angular/core';
 import { AngularFire, FirebaseListObservable } from 'angularfire2';
+import 'rxjs/add/operator/map';
 
 @Component({
   selector: 'app-root',
@@ -7,36 +9,21 @@ import { AngularFire, FirebaseListObservable } from 'angularfire2';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'app';
-  cuisines: FirebaseListObservable<any>;
-  restaurant;
+  cuisines: FirebaseListObservable<any[]>;
+  restaurants: Observable<any[]>;
 
   constructor(private af: AngularFire) {}
 
   ngOnInit() {
     this.cuisines = this.af.database.list('/cuisines');
-    this.restaurant = this.af.database.object('/restaurant');
-  }
-
-  add() {
-    this.cuisines.push({
-      name: 'Asian',
-      details: {
-        description: 'some description'
-      }
-    });
-  }
-
-  update() {
-    this.af.database.object('/restaurant').update({
-      name: 'New Name',
-      rating: 5
-    });
-  }
-
-  remove() {
-    this.af.database.object('/restaurant').remove()
-      .then(x => console.log('Success'))
-      .catch(error => console.log('Error', error));
+    this.restaurants = this.af.database.list('/restaurants')
+      .map(restaurants => {
+        console.log('Before Map', restaurants);
+        restaurants.map(restaurant => {
+          restaurant.cuisineType = this.af.database.object('/cuisines/' + restaurant.cuisine);
+        });
+        console.log('After Map', restaurants);
+        return restaurants;
+      });
   }
 }
