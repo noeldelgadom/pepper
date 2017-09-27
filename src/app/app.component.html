@@ -3,6 +3,7 @@
   <li *ngFor="let c of cuisines | async ">{{ c.name }}</li>
 </ul>
 <button (click)="add()">Add</button>
+<button (click)="update()">update</button>
 <p>
   {{ (restaurant | async)?.name }}
 </p>
