@@ -18,11 +18,14 @@ export class AppComponent implements OnInit {
     this.cuisines = this.af.database.list('/cuisines');
     this.restaurants = this.af.database.list('/restaurants')
       .map(restaurants => {
-        console.log('Before Map', restaurants);
         restaurants.map(restaurant => {
+          restaurant.featureTypes = [];
+          // tslint:disable-next-line:forin
+          for (const f in restaurant.features) {
+            restaurant.featureTypes.push(this.af.database.object('/features/' + f));
+          }
           restaurant.cuisineType = this.af.database.object('/cuisines/' + restaurant.cuisine);
         });
-        console.log('After Map', restaurants);
         return restaurants;
       });
   }
