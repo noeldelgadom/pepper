@@ -2,3 +2,7 @@
 <ul>
   <li *ngFor="let c of cuisines | async ">{{ c.$value }}</li>
 </ul>
+
+<p>
+  {{ (restaurant | async)?.name }}
+</p>
