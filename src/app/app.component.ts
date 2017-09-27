@@ -21,7 +21,10 @@ export class AppComponent implements OnInit {
       query: { orderByKey: true }
     });
     this.restaurants = this.af.database.list('/restaurants', {
-      query: { orderByChild: 'name' }
+      query: {
+        orderByChild: 'rating',
+        equalTo: 5
+      }
     })
       .map(restaurants => {
         restaurants.map(restaurant => {
